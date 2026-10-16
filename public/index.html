@@ -1,0 +1,772 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#070914">
+  <title>EXPOLIT — 3D Portfolio</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #070914;
+      --text: #f4f5ff;
+      --muted: #9298b6;
+      --blue: #70a5ff;
+      --line: rgba(255,255,255,.13);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      color: var(--text);
+      background: var(--bg);
+      font-family: "Space Grotesk", sans-serif;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    #space {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .site {
+      position: relative;
+      z-index: 1;
+    }
+
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 76px;
+      padding: 0 7%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      background: rgba(7,9,20,.6);
+      backdrop-filter: blur(14px);
+      z-index: 10;
+    }
+
+    .logo {
+      font-weight: 700;
+      letter-spacing: 3px;
+      font-size: 17px;
+    }
+
+    .logo span { color: var(--blue); }
+
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      font-size: 13px;
+      color: #c4c8db;
+    }
+
+    .nav-links a:hover { color: var(--blue); }
+
+    .hero {
+      min-height: 100svh;
+      padding: 130px 8% 80px;
+      display: flex;
+      align-items: center;
+      position: relative;
+    }
+
+    .hero-content {
+      max-width: 760px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .eyebrow {
+      color: var(--blue);
+      letter-spacing: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: clamp(54px, 10vw, 126px);
+      line-height: .92;
+      letter-spacing: -.075em;
+      font-weight: 600;
+    }
+
+    h1 .outline {
+      color: transparent;
+      -webkit-text-stroke: 1px #a9b8ed;
+    }
+
+    .hero p {
+      margin-top: 28px;
+      max-width: 420px;
+      color: var(--muted);
+      line-height: 1.9;
+      font-size: 15px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-top: 34px;
+    }
+
+    .btn {
+      padding: 14px 21px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      transition: .25s;
+      display: inline-block;
+    }
+
+    .btn.primary {
+      background: #e9efff;
+      color: #101426;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      border-color: var(--blue);
+    }
+
+    .scroll-note {
+      position: absolute;
+      bottom: 35px;
+      left: 8%;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--muted);
+    }
+
+    .scroll-note::before {
+      content: "";
+      display: inline-block;
+      width: 35px;
+      height: 1px;
+      background: var(--blue);
+      margin: 0 12px 3px 0;
+    }
+
+    section.content {
+      padding: 130px 8%;
+      border-top: 1px solid var(--line);
+      background: linear-gradient(
+        180deg,
+        rgba(7,9,20,.12),
+        rgba(7,9,20,.88) 25%,
+        rgba(7,9,20,.96)
+      );
+    }
+
+    .section-label {
+      color: var(--blue);
+      font-size: 11px;
+      letter-spacing: 4px;
+      margin-bottom: 22px;
+    }
+
+    h2 {
+      font-size: clamp(38px, 7vw, 76px);
+      letter-spacing: -.055em;
+      line-height: 1.05;
+      max-width: 800px;
+    }
+
+    .description {
+      color: var(--muted);
+      line-height: 1.9;
+      max-width: 530px;
+      margin-top: 25px;
+    }
+
+    .project-grid {
+      margin-top: 55px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .project {
+      min-height: 250px;
+      padding: 30px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: linear-gradient(
+        135deg,
+        rgba(91,123,219,.13),
+        rgba(255,255,255,.025)
+      );
+      transition: transform .35s, border-color .35s;
+    }
+
+    .project:hover {
+      transform: translateY(-7px);
+      border-color: rgba(112,165,255,.7);
+    }
+
+    .project .number {
+      color: var(--blue);
+      font-size: 12px;
+    }
+
+    .project h3 {
+      margin-top: 65px;
+      font-size: clamp(23px, 3vw, 34px);
+    }
+
+    .project p {
+      margin-top: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 13px;
+    }
+
+    .skills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 35px;
+    }
+
+    .skill {
+      border: 1px solid var(--line);
+      padding: 13px 18px;
+      color: #d7def7;
+      border-radius: 30px;
+      font-size: 13px;
+      background: rgba(255,255,255,.025);
+    }
+
+    .contact {
+      min-height: 65vh;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+    }
+
+    .contact h2 { max-width: 700px; }
+
+    footer {
+      padding: 28px 8%;
+      display: flex;
+      justify-content: space-between;
+      gap: 15px;
+      flex-wrap: wrap;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+    }
+
+    @media (max-width: 650px) {
+      nav {
+        height: 65px;
+        padding: 0 6%;
+      }
+
+      .nav-links { gap: 13px; font-size: 11px; }
+      .nav-links a:nth-child(2) { display: none; }
+
+      .hero { padding: 120px 6% 90px; }
+      .hero p { font-size: 14px; }
+
+      .scroll-note { left: 6%; }
+
+      section.content { padding: 95px 6%; }
+
+      .project-grid { grid-template-columns: 1fr; }
+      .project { min-height: 215px; }
+      .project h3 { margin-top: 45px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="space" aria-hidden="true"></canvas>
+
+  <div class="site">
+    <nav>
+      <a class="logo" href="#home">EXPOLIT<span>.</span></a>
+      <div class="nav-links">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-content">
+          <div class="eyebrow reveal">CREATIVE DEVELOPER / DIGITAL EXPLORER</div>
+          <h1 class="reveal">BUILDING<br><span class="outline">BEYOND</span><br>LIMITS.</h1>
+          <p class="reveal">
+            I turn ambitious ideas into immersive digital experiences
+            using creative design, modern code, and a little imagination.
+          </p>
+          <div class="actions reveal">
+            <a class="btn primary" href="#projects">EXPLORE MY WORK ↗</a>
+            <a class="btn" href="#contact">LET'S CONNECT</a>
+          </div>
+        </div>
+        <div class="scroll-note">SCROLL TO EXPLORE</div>
+      </section>
+
+      <section class="content" id="about">
+        <div class="section-label reveal">01 / ABOUT ME</div>
+        <h2 class="reveal">Curiosity creates<br>the extraordinary.</h2>
+        <p class="description reveal">
+          I'm a developer who enjoys experimenting with the web,
+          interactive experiences, and futuristic visual design.
+          My goal is to create things that feel alive, not ordinary.
+        </p>
+      </section>
+
+      <section class="content" id="projects">
+        <div class="section-label reveal">02 / SELECTED WORK</div>
+        <h2 class="reveal">Ideas turned<br>into experiences.</h2>
+
+        <div class="project-grid">
+          <article class="project reveal">
+            <div class="number">PROJECT — 01</div>
+            <h3>Digital Universe</h3>
+            <p>An immersive space-inspired web experience with 3D visuals.</p>
+          </article>
+
+          <article class="project reveal">
+            <div class="number">PROJECT — 02</div>
+            <h3>Future Interface</h3>
+            <p>A futuristic dashboard concept built around clarity and motion.</p>
+          </article>
+
+          <article class="project reveal">
+            <div class="number">PROJECT — 03</div>
+            <h3>Creative Lab</h3>
+            <p>A playground for bold ideas, experimental layouts, and design.</p>
+          </article>
+
+          <article class="project reveal">
+            <div class="number">PROJECT — 04</div>
+            <h3>Next Dimension</h3>
+            <p>A concept exploring depth, light, and interactive storytelling.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="content" id="skills">
+        <div class="section-label reveal">03 / MY TOOLKIT</div>
+        <h2 class="reveal">Designed with intent.<br>Built with code.</h2>
+        <div class="skills reveal">
+          <span class="skill">HTML5</span>
+          <span class="skill">CSS3</span>
+          <span class="skill">JavaScript</span>
+          <span class="skill">Three.js</span>
+          <span class="skill">GSAP</span>
+          <span class="skill">Responsive Design</span>
+          <span class="skill">UI / UX</span>
+        </div>
+      </section>
+
+      <section class="content contact" id="contact">
+        <div class="section-label reveal">04 / YOUR MOVE</div>
+        <h2 class="reveal">Have an idea?<br>Let's make it real.</h2>
+        <p class="description reveal">
+          Got a project, collaboration, or interesting idea?
+          Reach out and let's build something memorable.
+        </p>
+        
+<form id="contact-form" class="reveal"
+      style="margin-top:30px; width:100%; max-width:500px;">
+
+  <label for="name">Your name</label>
+  <input id="name" name="name" required minlength="2"
+         maxlength="80" autocomplete="name"
+         placeholder="Enter your name">
+
+  <label for="email">Your email</label>
+  <input id="email" name="email" type="email" required
+         maxlength="254" autocomplete="email"
+         placeholder="you@example.com">
+
+  <label for="message">Your message</label>
+  <textarea id="message" name="message" required
+            minlength="10" maxlength="2000" rows="5"
+            placeholder="Tell me about your idea..."></textarea>
+
+  <button class="btn primary" type="submit"
+          style="margin-top:18px; cursor:pointer;">
+    SEND MESSAGE ↗
+  </button>
+
+  <p id="form-status" role="status"
+     aria-live="polite" style="margin-top:15px;"></p>
+</form>
+
+<style>
+  #contact-form label {
+    display: block;
+    margin: 18px 0 8px;
+    color: #c4c8db;
+    font-size: 13px;
+  }
+
+  #contact-form input,
+  #contact-form textarea {
+    display: block;
+    width: 100%;
+    padding: 14px;
+    color: #f4f5ff;
+    background: #101326;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 5px;
+    font: inherit;
+  }
+
+  #contact-form textarea {
+    resize: vertical;
+  }
+
+  #contact-form input:focus,
+  #contact-form textarea:focus {
+    outline: 1px solid #70a5ff;
+  }
+</style>
+
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 EXPOLIT</span>
+      <span>DESIGNED FOR THE NEXT DIMENSION</span>
+    </footer>
+  </div>
+
+  <script type="module">
+    import * as THREE from
+      "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js";
+
+    import { gsap } from
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.7/index.js";
+
+    import { ScrollTrigger } from
+      "https://cdn.jsdelivr.net/npm/gsap@3.12.7/ScrollTrigger.js";
+
+    gsap.registerPlugin(ScrollTrigger);
+    
+const contactForm = document.querySelector("#contact-form");
+const formStatus = document.querySelector("#form-status");
+
+contactForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const button = contactForm.querySelector('button[type="submit"]');
+  button.disabled = true;
+  formStatus.textContent = "Sending your message...";
+
+  const formData = new FormData(contactForm);
+
+  try {
+    const response = await fetch("/api/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        name: formData.get("name"),
+        email: formData.get("email"),
+        message: formData.get("message")
+      })
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.message || "Could not send message.");
+    }
+
+    formStatus.textContent = result.message;
+    contactForm.reset();
+  } catch (error) {
+    formStatus.textContent =
+      "Unable to send. Please check your connection and try again.";
+    console.error(error);
+  } finally {
+    button.disabled = false;
+  }
+});
+
+
+    // ---------- 3D SCENE ----------
+
+    const canvas = document.querySelector("#space");
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x070914, 0.035);
+
+    const camera = new THREE.PerspectiveCamera(
+      45,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      100
+    );
+
+    camera.position.set(0, 0, 8);
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: "default"
+    });
+
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+    // Main glowing 3D object
+    const planet = new THREE.Group();
+    scene.add(planet);
+
+    const coreGeometry = new THREE.IcosahedronGeometry(1.35, 4);
+
+    const coreMaterial = new THREE.MeshStandardMaterial({
+      color: 0x142e71,
+      metalness: 0.65,
+      roughness: 0.3,
+      emissive: 0x14265d,
+      emissiveIntensity: 0.7,
+      flatShading: true
+    });
+
+    const core = new THREE.Mesh(coreGeometry, coreMaterial);
+    planet.add(core);
+
+    // Wireframe overlay
+    const wire = new THREE.Mesh(
+      new THREE.IcosahedronGeometry(1.39, 2),
+      new THREE.MeshBasicMaterial({
+        color: 0x83b5ff,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.32
+      })
+    );
+
+    planet.add(wire);
+
+    // Orbital rings
+    const ringMaterial = new THREE.MeshBasicMaterial({
+      color: 0x6999ff,
+      transparent: true,
+      opacity: 0.6
+    });
+
+    const ring = new THREE.Mesh(
+      new THREE.TorusGeometry(1.85, 0.012, 8, 150),
+      ringMaterial
+    );
+
+    ring.rotation.x = 1.15;
+    ring.rotation.y = -0.3;
+    planet.add(ring);
+
+    const ring2 = new THREE.Mesh(
+      new THREE.TorusGeometry(2.05, 0.006, 8, 150),
+      new THREE.MeshBasicMaterial({
+        color: 0x9d77ff,
+        transparent: true,
+        opacity: 0.45
+      })
+    );
+
+    ring2.rotation.x = 0.65;
+    ring2.rotation.y = 0.6;
+    planet.add(ring2);
+
+    // Lighting
+    scene.add(new THREE.AmbientLight(0x7185ff, 1.4));
+
+    const light1 = new THREE.PointLight(0x4c86ff, 35, 20);
+    light1.position.set(3, 2, 4);
+    scene.add(light1);
+
+    const light2 = new THREE.PointLight(0x9b49ff, 25, 20);
+    light2.position.set(-4, -2, 1);
+    scene.add(light2);
+
+    // Stars
+    const starCount = window.innerWidth < 650 ? 450 : 1000;
+    const starPositions = new Float32Array(starCount * 3);
+
+    for (let i = 0; i < starCount; i++) {
+      starPositions[i * 3] = (Math.random() - 0.5) * 30;
+      starPositions[i * 3 + 1] = (Math.random() - 0.5) * 22;
+      starPositions[i * 3 + 2] = (Math.random() - 0.5) * 18 - 3;
+    }
+
+    const starGeometry = new THREE.BufferGeometry();
+    starGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(starPositions, 3)
+    );
+
+    const stars = new THREE.Points(
+      starGeometry,
+      new THREE.PointsMaterial({
+        color: 0xb5c9ff,
+        size: 0.025,
+        transparent: true,
+        opacity: 0.8
+      })
+    );
+
+    scene.add(stars);
+
+    // Place the 3D object to the right on desktop.
+    function placePlanet() {
+      const mobile = window.innerWidth < 650;
+
+      planet.position.x = mobile ? 1.15 : 2.65;
+      planet.position.y = mobile ? 1.05 : 0.1;
+
+      planet.scale.setScalar(mobile ? 0.68 : 1);
+    }
+
+    placePlanet();
+
+    // ---------- SCROLL ANIMATION ----------
+
+    // Object rotates and changes position with page scroll.
+    gsap.to(planet.rotation, {
+      y: Math.PI * 2.5,
+      x: Math.PI * 1.1,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "main",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1.2
+      }
+    });
+
+    gsap.to(planet.position, {
+      y: -2.5,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "main",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: 1.2
+      }
+    });
+
+    gsap.to(camera.position, {
+      z: 6.3,
+      ease: "none",
+      scrollTrigger: {
+        trigger: "#projects",
+        start: "top bottom",
+        end: "bottom center",
+        scrub: 1
+      }
+    });
+
+    // Reveal content as each section enters view.
+    gsap.utils.toArray(".reveal").forEach((element) => {
+      gsap.fromTo(
+        element,
+        { opacity: 0, y: 32 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 90%",
+            once: true
+          }
+        }
+      );
+    });
+
+    // Subtle idle movement.
+    gsap.to(planet.position, {
+      x: "+=0.12",
+      duration: 2.5,
+      yoyo: true,
+      repeat: -1,
+      ease: "sine.inOut"
+    });
+
+    // ---------- RENDER LOOP ----------
+
+    const clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const time = clock.getElapsedTime();
+
+      // Slow rotation continues when the user is not scrolling.
+      planet.rotation.y += 0.0015;
+      ring.rotation.z = Math.sin(time * 0.3) * 0.08;
+      stars.rotation.y = time * 0.006;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    // ---------- RESPONSIVE RESIZE ----------
+
+    window.addEventListener("resize", () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      placePlanet();
+      ScrollTrigger.refresh();
+    });
+  </script>
+</body>
+</html>
